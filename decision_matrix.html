@@ -51,17 +51,22 @@
                     criterionDiv.innerHTML = `
                         <label for="criterion${j}">Criterion ${j}:</label>
                         <input type="text" id="criterion${j}" name="criterion${j}">
-                        <label for="weight${i}_${j}">Weight (1-10):</label>
-                        <input type="number" id="weight${i}_${j}" name="weight${i}_${j}" min="1" max="10">
+                        <label for="weight${i}_${j}">Weight:</label>
+                        <select id="weight${i}_${j}" name="weight${i}_${j}">
+                            <option value="0">0 - Does not matter at all</option>
+                            <option value="4">4 - Matters moderately</option>
+                            <option value="8">8 - Matters significantly</option>
+                            <option value="10">10 - Matters completely</option>
+                        </select>
+                        <label for="confidence${i}_${j}">Confidence (0-100):</label>
+                        <input type="number" id="confidence${i}_${j}" name="confidence${i}_${j}" min="0" max="100" step="1">
                     `;
                     optionDiv.appendChild(criterionDiv);
                 }
                 decisionTool.appendChild(optionDiv);
             }
             calculateBtn.style.display = 'block';
-        });
-
-        calculateBtn.addEventListener('click', () => {
+            calculateBtn.addEventListener('click', () => {
             const optionCount = parseInt(decisionForm.optionCount.value, 10);
             const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
             const scores = [];
@@ -70,7 +75,9 @@
                 let score = 0;
                 for (let j = 1; j <= criteriaCount; j++) {
                     const weight = parseInt(document.getElementById(`weight${i}_${j}`).value, 10);
-                    score += weight;
+                    const confidence = parseInt(document.getElementById(`confidence${i}_${j}`).value, 10);
+                    const weightedConfidence = weight * (confidence / 100);
+                    score += weightedConfidence;
                 }
                 scores.push({ option: i, score });
             }
@@ -79,8 +86,10 @@
 
             resultsDiv.innerHTML = '<h2>Results</h2>';
             scores.forEach((score) => {
-            const optionName = document.getElementById(`option${score.option}`).value;
-            resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score}</p>`;
+                const optionName = document.getElementById(`option${score.option}`).value;
+                resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
+            });
         });
-    });
-</script>
+    </script>
+</body>
+</html>
