@@ -20,30 +20,67 @@
         <form id="decisionForm">
             <label for="optionCount">Number of options:</label>
             <input type="number" id="optionCount" name="optionCount" min="1" value="2">
+            <label for="criteriaCount">Number of criteria:</label>
+            <input type="number" id="criteriaCount" name="criteriaCount" min="1" value="2">
             <button type="submit">Create</button>
         </form>
         <div id="decisionTool"></div>
+        <button id="calculateBtn" style="display:none;">Calculate</button>
+        <div id="results"></div>
     </div>
     <script>
         const decisionForm = document.getElementById('decisionForm');
         const decisionTool = document.getElementById('decisionTool');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultsDiv = document.getElementById('results');
 
         decisionForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const optionCount = parseInt(decisionForm.optionCount.value, 10);
+            const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
 
             decisionTool.innerHTML = '';
             for (let i = 1; i <= optionCount; i++) {
                 const optionDiv = document.createElement('div');
                 optionDiv.innerHTML = `
-                    <label for="option${i}">Option ${i}:</label>
+                    <h3>Option ${i}:</h3>
                     <input type="text" id="option${i}" name="option${i}">
-                    <label for="weight${i}">Weight (1-10):</label>
-                    <input type="number" id="weight${i}" name="weight${i}" min="1" max="10">
                 `;
+                for (let j = 1; j <= criteriaCount; j++) {
+                    const criterionDiv = document.createElement('div');
+                    criterionDiv.innerHTML = `
+                        <label for="criterion${j}">Criterion ${j}:</label>
+                        <input type="text" id="criterion${j}" name="criterion${j}">
+                        <label for="weight${i}_${j}">Weight (1-10):</label>
+                        <input type="number" id="weight${i}_${j}" name="weight${i}_${j}" min="1" max="10">
+                    `;
+                    optionDiv.appendChild(criterionDiv);
+                }
                 decisionTool.appendChild(optionDiv);
             }
+            calculateBtn.style.display = 'block';
         });
-    </script>
-</body>
-</html>
+
+        calculateBtn.addEventListener('click', () => {
+            const optionCount = parseInt(decisionForm.optionCount.value, 10);
+            const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
+            const scores = [];
+
+            for (let i = 1; i <= optionCount; i++) {
+                let score = 0;
+                for (let j = 1; j <= criteriaCount; j++) {
+                    const weight = parseInt(document.getElementById(`weight${i}_${j}`).value, 10);
+                    score += weight;
+                }
+                scores.push({ option: i, score });
+            }
+
+            scores.sort((a, b) => b.score - a.score);
+
+            resultsDiv.innerHTML = '<h2>Results</h2>';
+            scores.forEach((score) => {
+            const optionName = document.getElementById(`option${score.option}`).value;
+            resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score}</p>`;
+        });
+    });
+</script>
