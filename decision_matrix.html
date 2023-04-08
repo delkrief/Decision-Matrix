@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2202.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Interactive Decision-Making Tool&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 600px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;Interactive Decision-Making Tool&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;form id="decisionForm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="optionCount"&gt;Number of options:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="number" id="optionCount" name="optionCount" min="1" value="2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button type="submit"&gt;Create&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/form&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="decisionTool"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const decisionForm = document.getElementById('decisionForm');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const decisionTool = document.getElementById('decisionTool');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>decisionForm.addEventListener('submit', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const optionCount = parseInt(decisionForm.optionCount.value, 10);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>decisionTool.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 1; i &lt;= optionCount; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const optionDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionDiv.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label for="option${i}"&gt;Option ${i}:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="option${i}" name="option${i}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label for="weight${i}"&gt;Weight (1-10):&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="number" id="weight${i}" name="weight${i}" min="1" max="10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>decisionTool.appendChild(optionDiv);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
