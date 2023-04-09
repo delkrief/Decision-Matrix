@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,10 +26,8 @@
         </form>
         <div id="decisionTool"></div>
         <button id="calculateBtn" style="display:none;">Calculate</button>
-        <div id="decisionTree"></div>
         <div id="results"></div>
     </div>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
         const decisionForm = document.getElementById('decisionForm');
         const decisionTool = document.getElementById('decisionTool');
@@ -46,71 +44,60 @@
                 const optionDiv = document.createElement('div');
                 optionDiv.innerHTML = `
                     <h3>Option ${i}:</h3>
+                    <label for="option${i}">Enter a description for Option ${i}:</label>
                     <input type="text" id="option${i}" name="option${i}">
                 `;
                 for (let j = 1; j <= criteriaCount; j++) {
                     const criterionDiv = document.createElement('div');
                     criterionDiv.innerHTML = `
                         <label for="criterion${j}">Criterion ${j}:</label>
-                        <input type="text" id="criterion${j}" name="criterion${j}">
-                        <label for="weight${i}_${j}">Weight:</label>
+                        <input type="text" id="criterion${j}" name="criterion${j}" placeholder="Description for Criterion ${j}">
+                        <label for="weight${i}_${j}">Weight of Criterion ${j} for Option ${i}:</label>
                         <select id="weight${i}_${j}" name="weight${i}_${j}">
                             <option value="0">0 - Does not matter at all</option>
                             <option value="4">4 - Matters moderately</option>
                             <option value="8">8 - Matters significantly</option>
                             <option value="10">10 - Matters completely</option>
                         </select>
-                        <label for="confidence${i}_${j}">Confidence (0-100):</label>
-                        <input type="number" id="confidence${i}_${j}" name="confidence${i}_${j}" min="0" max="100" step="1">
+                        <label for="confidence${i}_${j}">Confidence in Criterion ${j} for Option ${i} (0-100):</label>
+                        <input type="number" id="confidence${i}_${j}" name="confidence${i}_${j}" min="0" max="100" step="1" placeholder="Enter a number between 0 and 100">
                     `;
                     optionDiv.appendChild(criterionDiv);
                 }
                 decisionTool.appendChild(optionDiv);
             }
             calculateBtn.style.display = 'block';
-                });
-
-        function createTreeStructure(options, scores) {
-          // Implement your tree structure creation logic here
-        }
-
-        function drawDecisionTree(treeData) {
-          // Implement your decision tree drawing logic here
-        }
+        });
 
         calculateBtn.addEventListener('click', () => {
-          const optionCount = parseInt(decisionForm.optionCount.value, 10);
-          const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
-          const scores = [];
-          const options = [];
+            const optionCount = parseInt(decisionForm.optionCount.value, 10);
+            const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
+            const scores = [];
+            const options = [];
 
-          for (let i = 1; i <= optionCount; i++) {
-            let score = 0;
-            const optionScores = [];
-            const optionName = document.getElementById(`option${i}`).value;
-            options.push(optionName);
+            for (let i = 1; i <= optionCount; i++) {
+                let score = 0;
+                const optionScores = [];
+                const optionName = document.getElementById(`option${i}`).value;
+                options.push(optionName);
 
-            for (let j = 1; j <= criteriaCount; j++) {
-              const weight = parseInt(document.getElementById(`weight${i}_${j}`).value, 10);
-              const confidence = parseInt(document.getElementById(`confidence${i}_${j}`).value, 10);
-              const weightedConfidence = weight * (confidence / 100);
-              score += weightedConfidence;
-              optionScores.push({ weight: weight, weightedConfidence: weightedConfidence });
+                for (let j = 1; j <= criteriaCount; j++) {
+                    const weight = parseInt(document.getElementById(`weight${i}_${j}`).value, 10);
+                    const confidence = parseInt(document.getElementById(`confidence${i}_${j}`).value, 10);
+                    const weightedConfidence = weight * (confidence / 100);
+                    score += weightedConfidence;
+                    optionScores.push({ weight: weight, weightedConfidence: weightedConfidence });
+                }
+                scores.push({ option: i, score, criteriaScores: optionScores });
             }
-            scores.push({ option: i, score, criteriaScores: optionScores });
-          }
 
-          scores.sort((a, b) => b.score - a.score);
+            scores.sort((a, b) => b.score - a.score);
 
-          resultsDiv.innerHTML = '<h2>Results</h2>';
-          scores.forEach((score) => {
-            const optionName = document.getElementById(`option${score.option}`).value;
-            resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
-          });
-
-          // Decision tree visualization code
-          const treeData = createTreeStructure(options, scores.map((score) => score.criteriaScores));
-          drawDecisionTree(treeData);
+            resultsDiv.innerHTML = '<h2>Results</h2>';
+            scores.forEach((score) => {
+                const optionName = document.getElementById(`option${score.option}`).value;
+                resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
+            });
         });
     </script>
 </body>
