@@ -95,14 +95,23 @@
             scores.sort((a, b) => b.score - a.score);
 
             resultsDiv.innerHTML = '<h2>Results</h2>';
-            scores.forEach((score) => {
-                const optionName = document.getElementById(`option${score.option}`).value;
-                resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
-            });
+  scores.forEach((score) => {
+    const optionName = document.getElementById(`option${score.option}`).value;
+    resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
+  });
 
-            // Decision tree visualization code
-            const treeData = createTreeStructure(options, scores.map((score) => score.criteriaScores));
-            drawDecisionTree(treeData);
+  // Advice section
+  resultsDiv.innerHTML += '<h2>Advice</h2>';
+  resultsDiv.innerHTML += '<p>Based on the scores, consider the following:</p>';
+  resultsDiv.innerHTML += '<ul>';
+  resultsDiv.innerHTML += '<li>Are there any options that stand out as being significantly better than the others?</li>';
+  resultsDiv.innerHTML += '<li>Are there any criteria that seem to have a greater impact on the scores?</li>';
+  resultsDiv.innerHTML += '<li>Are there any options that should be eliminated from consideration?</li>';
+  resultsDiv.innerHTML += '</ul>';
+
+  // Decision tree visualization code
+  const treeData = createTreeStructure(options, scores.map((score) => score.criteriaScores));
+  drawDecisionTree(treeData);
         });
     </script>
 </body>
