@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,10 +17,11 @@
 <body>
     <div class="container">
         <h1>Interactive Decision-Making Tool</h1>
+        <p>This tool will help you make a decision by comparing different options based on multiple criteria. Follow the prompts and provide the required information to get started.</p>
         <form id="decisionForm">
-            <label for="optionCount">Number of options:</label>
+            <label for="optionCount">Number of options (e.g., 3 for comparing three different cars):</label>
             <input type="number" id="optionCount" name="optionCount" min="1" value="2">
-            <label for="criteriaCount">Number of criteria:</label>
+            <label for="criteriaCount">Number of criteria (e.g., 4 for considering price, fuel efficiency, reliability, and design):</label>
             <input type="number" id="criteriaCount" name="criteriaCount" min="1" value="2">
             <button type="submit">Create</button>
         </form>
@@ -28,6 +29,7 @@
         <button id="calculateBtn" style="display:none;">Calculate</button>
         <div id="results"></div>
     </div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
         const decisionForm = document.getElementById('decisionForm');
         const decisionTool = document.getElementById('decisionTool');
@@ -43,24 +45,23 @@
             for (let i = 1; i <= optionCount; i++) {
                 const optionDiv = document.createElement('div');
                 optionDiv.innerHTML = `
-                    <h3>Option ${i}:</h3>
-                    <label for="option${i}">Enter a description for Option ${i}:</label>
-                    <input type="text" id="option${i}" name="option${i}">
+                    <h3>Option ${i} (e.g., Car ${i}):</h3>
+                    <input type="text" id="option${i}" name="option${i}" placeholder="Option ${i} name">
                 `;
                 for (let j = 1; j <= criteriaCount; j++) {
                     const criterionDiv = document.createElement('div');
                     criterionDiv.innerHTML = `
-                        <label for="criterion${j}">Criterion ${j}:</label>
-                        <input type="text" id="criterion${j}" name="criterion${j}" placeholder="Description for Criterion ${j}">
-                        <label for="weight${i}_${j}">Weight of Criterion ${j} for Option ${i}:</label>
+                        <label for="criterion${j}">Criterion ${j} (e.g., Price):</label>
+                        <input type="text" id="criterion${j}" name="criterion${j}" placeholder="Criterion ${j} name">
+                        <label for="weight${i}_${j}">Weight:</label>
                         <select id="weight${i}_${j}" name="weight${i}_${j}">
                             <option value="0">0 - Does not matter at all</option>
                             <option value="4">4 - Matters moderately</option>
                             <option value="8">8 - Matters significantly</option>
                             <option value="10">10 - Matters completely</option>
                         </select>
-                        <label for="confidence${i}_${j}">Confidence in Criterion ${j} for Option ${i} (0-100):</label>
-                        <input type="number" id="confidence${i}_${j}" name="confidence${i}_${j}" min="0" max="100" step="1" placeholder="Enter a number between 0 and 100">
+                        <label for="confidence${i}_${j}">Confidence (0-100) - How well does this option meet the criterion? (e.g., 80 for a car with good fuel efficiency):</label>
+                        <input type="number" id="confidence${i}_${j}" name="confidence${i}_${j}" min="0" max="100" step="1" placeholder="0-100">
                     `;
                     optionDiv.appendChild(criterionDiv);
                 }
@@ -98,6 +99,10 @@
                 const optionName = document.getElementById(`option${score.option}`).value;
                 resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
             });
+
+            // Decision tree visualization code
+            const treeData = createTreeStructure(options, scores.map((score) => score.criteriaScores));
+            drawDecisionTree(treeData);
         });
     </script>
 </body>
