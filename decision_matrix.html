@@ -12,6 +12,11 @@
             max-width: 600px;
             margin: 0 auto;
         }
+        .criterion-description {
+            font-size: 0.8em;
+            font-style: italic;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -44,13 +49,13 @@
                 const optionDiv = document.createElement('div');
                 optionDiv.innerHTML = `
                     <h3>Option ${i}:</h3>
-                    <input type="text" id="option${i}" name="option${i}">
+                    <input type="text" id="option${i}" name="option${i}" placeholder="Enter option name">
                 `;
                 for (let j = 1; j <= criteriaCount; j++) {
                     const criterionDiv = document.createElement('div');
                     criterionDiv.innerHTML = `
                         <label for="criterion${j}">Criterion ${j}:</label>
-                        <input type="text" id="criterion${j}" name="criterion${j}">
+                        <input type="text" id="criterion${j}" name="criterion${j}" placeholder="Enter criterion name">
                         <label for="weight${i}_${j}">Weight:</label>
                         <select id="weight${i}_${j}" name="weight${i}_${j}">
                             <option value="0">0 - Does not matter at all</option>
@@ -58,6 +63,7 @@
                             <option value="8">8 - Matters significantly</option>
                             <option value="10">10 - Matters completely</option>
                         </select>
+                        <span class="criterion-description"></span>
                         <label for="confidence${i}_${j}">Confidence (0-100):</label>
                         <input type="number" id="confidence${i}_${j}" name="confidence${i}_${j}" min="0" max="100" step="1">
                     `;
@@ -65,6 +71,12 @@
                 }
                 decisionTool.appendChild(optionDiv);
             }
+
+            const criterionDescriptions = document.querySelectorAll('.criterion-description');
+            criterionDescriptions.forEach((description, index) => {
+                description.textContent = `${index % 4 + 1} - ${['Not important', 'Somewhat important', 'Very important', 'Extremely important'][index % 4]}`;
+            });
+
             calculateBtn.style.display = 'block';
         });
 
