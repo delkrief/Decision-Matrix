@@ -26,6 +26,7 @@
         </form>
         <div id="decisionTool"></div>
         <button id="calculateBtn" style="display:none;">Calculate</button>
+        <div id="decisionTree"></div>
         <div id="results"></div>
     </div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -67,39 +68,50 @@
                 decisionTool.appendChild(optionDiv);
             }
             calculateBtn.style.display = 'block';
-        });
+                });
+
+        function createTreeStructure(options, scores) {
+          // Implement your tree structure creation logic here
+        }
+
+        function drawDecisionTree(treeData) {
+          // Implement your decision tree drawing logic here
+        }
 
         calculateBtn.addEventListener('click', () => {
-  const optionCount = parseInt(decisionForm.optionCount.value, 10);
-  const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
-  const scores = [];
-  const options = [];
+          const optionCount = parseInt(decisionForm.optionCount.value, 10);
+          const criteriaCount = parseInt(decisionForm.criteriaCount.value, 10);
+          const scores = [];
+          const options = [];
 
-  for (let i = 1; i <= optionCount; i++) {
-    let score = 0;
-    const optionScores = [];
-    const optionName = document.getElementById(`option${i}`).value;
-    options.push(optionName);
+          for (let i = 1; i <= optionCount; i++) {
+            let score = 0;
+            const optionScores = [];
+            const optionName = document.getElementById(`option${i}`).value;
+            options.push(optionName);
 
-    for (let j = 1; j <= criteriaCount; j++) {
-      const weight = parseInt(document.getElementById(`weight${i}_${j}`).value, 10);
-      const confidence = parseInt(document.getElementById(`confidence${i}_${j}`).value, 10);
-      const weightedConfidence = weight * (confidence / 100);
-      score += weightedConfidence;
-      optionScores.push({ weight: weight, weightedConfidence: weightedConfidence });
-    }
-    scores.push({ option: i, score, criteriaScores: optionScores });
-  }
+            for (let j = 1; j <= criteriaCount; j++) {
+              const weight = parseInt(document.getElementById(`weight${i}_${j}`).value, 10);
+              const confidence = parseInt(document.getElementById(`confidence${i}_${j}`).value, 10);
+              const weightedConfidence = weight * (confidence / 100);
+              score += weightedConfidence;
+              optionScores.push({ weight: weight, weightedConfidence: weightedConfidence });
+            }
+            scores.push({ option: i, score, criteriaScores: optionScores });
+          }
 
-  scores.sort((a, b) => b.score - a.score);
+          scores.sort((a, b) => b.score - a.score);
 
-  resultsDiv.innerHTML = '<h2>Results</h2>';
-  scores.forEach((score) => {
-    const optionName = document.getElementById(`option${score.option}`).value;
-    resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
-  });
+          resultsDiv.innerHTML = '<h2>Results</h2>';
+          scores.forEach((score) => {
+            const optionName = document.getElementById(`option${score.option}`).value;
+            resultsDiv.innerHTML += `<p>Option ${score.option} (${optionName}): ${score.score.toFixed(2)}</p>`;
+          });
 
-  // Decision tree visualization code
-  const treeData = createTreeStructure(options, scores.map((score) => score.criteriaScores));
-  drawDecisionTree(treeData);
-});
+          // Decision tree visualization code
+          const treeData = createTreeStructure(options, scores.map((score) => score.criteriaScores));
+          drawDecisionTree(treeData);
+        });
+    </script>
+</body>
+</html>
